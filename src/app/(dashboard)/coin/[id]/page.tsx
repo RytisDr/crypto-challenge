@@ -1,9 +1,11 @@
 import { fetchCoinDetail } from "@/lib/coingecko";
 import Image from "next/image";
-import Link from "next/link";
-import { routes } from "@/lib/routes";
 import { StarButton } from "@/components/StarButton";
 import { notFound } from "next/navigation";
+import { DetailPageHeader } from "@/components/DetailPageHeader";
+import { ErrorCard } from "@/components/ErrorCard";
+import { Card } from "@/components/Card";
+
 const pageDescription =
   "View detailed information about a specific cryptocurrency";
 
@@ -64,18 +66,11 @@ export default async function CoinPage({ params }: { params: any }) {
 
   if (error || !coin) {
     return (
-      <main className="min-h-[calc(100vh-64px)] bg-gradient-to-br from-[var(--background)] to-[var(--background)] py-12 px-4 sm:px-6 lg:px-8">
+      <main className="bg-gradient-to-br from-[var(--background)] to-[var(--background)] py-12 px-4 sm:px-6 lg:px-8">
         <div className="max-w-4xl mx-auto">
-          <Link
-            href={routes.home()}
-            className="text-[var(--primary)] hover:text-[var(--primary-foreground)] mb-6 inline-block"
-          >
-            ← Back to Price Tracker
-          </Link>
-          <div className="rounded-lg border border-[var(--border)] bg-[var(--card)] p-8 text-center">
-            <p className="text-sm text-[var(--destructive)]">
-              <strong>Error:</strong> {error || "Coin not found"}
-            </p>
+          <DetailPageHeader title="Coin Not Found" />
+          <div className="mb-8">
+            <ErrorCard message={error || "Coin not found"} />
           </div>
         </div>
       </main>
@@ -89,14 +84,12 @@ export default async function CoinPage({ params }: { params: any }) {
   return (
     <main className="bg-gradient-to-br from-[var(--background)] to-[var(--background)] py-12 px-4 sm:px-6 lg:px-8">
       <div className="max-w-4xl mx-auto">
-        <Link
-          href={routes.home()}
-          className="text-[var(--primary)] hover:text-[var(--primary-foreground)] mb-8 inline-block font-medium"
-        >
-          ← Back to Price Tracker
-        </Link>
+        <DetailPageHeader
+          title={coin.name}
+          subtitle={coin.symbol.toUpperCase()}
+        />
 
-        <div className="rounded-lg border border-[var(--border)] bg-[var(--card)] p-8 mb-8">
+        <Card className="mb-8">
           <div className="flex items-start gap-6 mb-6">
             <Image
               src={coin.image.large}
@@ -106,17 +99,17 @@ export default async function CoinPage({ params }: { params: any }) {
               className="rounded-lg"
             />
             <div className="flex-1">
-              <div className="flex items-center gap-3 mb-2">
-                <h1 className="text-3xl font-bold text-[var(--foreground)]">
+              <div className="flex items-center gap-3 mb-4">
+                <h2 className="text-2xl font-bold text-[var(--foreground)]">
                   {coin.name}
-                </h1>
-                <span className="text-lg font-semibold text-[var(--muted-foreground)] uppercase">
+                </h2>
+                <span className="text-sm font-semibold text-[var(--muted-foreground)] uppercase px-2 py-1 bg-[var(--background)] rounded">
                   {coin.symbol}
                 </span>
                 <StarButton coinId={coin.id} />
               </div>
               {price && (
-                <p className="text-2xl font-bold text-[var(--foreground)]">
+                <p className="text-3xl font-bold text-[var(--foreground)]">
                   $
                   {price.toLocaleString("en-US", {
                     minimumFractionDigits: 2,
@@ -130,10 +123,10 @@ export default async function CoinPage({ params }: { params: any }) {
           {marketCap && (
             <div className="grid grid-cols-1 sm:grid-cols-2 gap-4 pt-6 border-t border-[var(--border)]">
               <div>
-                <p className="text-sm text-[var(--muted-foreground)] mb-1">
+                <p className="text-sm text-[var(--muted-foreground)] mb-2">
                   Market Cap
                 </p>
-                <p className="text-lg font-semibold text-[var(--foreground)]">
+                <p className="text-xl font-semibold text-[var(--foreground)]">
                   $
                   {marketCap >= 1e9
                     ? (marketCap / 1e9).toFixed(2) + "B"
@@ -142,16 +135,18 @@ export default async function CoinPage({ params }: { params: any }) {
               </div>
             </div>
           )}
-        </div>
+        </Card>
 
-        <div className="rounded-lg border border-[var(--border)] bg-[var(--card)] p-8">
-          <h2 className="text-xl font-bold text-[var(--foreground)] mb-4">
-            About {coin.name}
-          </h2>
-          <p className="text-[var(--muted-foreground)] leading-relaxed text-justify">
-            {description}
-          </p>
-        </div>
+        <Card>
+          <div>
+            <h3 className="text-lg font-bold text-[var(--foreground)] mb-4">
+              About {coin.name}
+            </h3>
+            <p className="text-[var(--muted-foreground)] leading-relaxed">
+              {description}
+            </p>
+          </div>
+        </Card>
       </div>
     </main>
   );

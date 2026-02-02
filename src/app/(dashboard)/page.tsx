@@ -1,5 +1,8 @@
 import { fetchTopCoins } from "@/lib/coingecko";
 import { CoinList } from "@/components/CoinList";
+import { PageContainer } from "@/components/PageContainer";
+import { PageHeader } from "@/components/PageHeader";
+import { ErrorCard } from "@/components/ErrorCard";
 import { Coin } from "@/types/coin";
 import { Metadata } from "next/dist/lib/metadata/types/metadata-interface";
 
@@ -20,36 +23,28 @@ export default async function Home() {
   }
 
   return (
-    <main className="min-h-[calc(100vh-64px)] bg-gradient-to-br from-[var(--background)] to-[var(--background)] py-12 px-4 sm:px-6 lg:px-8">
-      <div className="max-w-6xl mx-auto">
-        <div className="mb-12">
-          <h1 className="text-4xl font-bold text-[var(--foreground)] mb-2">
-            Price Tracker
-          </h1>
-          <p className="text-[var(--muted-foreground)]">
-            Track the top 10 cryptocurrencies in real-time.
-          </p>
+    <PageContainer>
+      <PageHeader
+        title="Price Tracker"
+        description="Track the top 10 cryptocurrencies in real-time."
+      />
+      {error && (
+        <div className="mb-8">
+          <ErrorCard
+            message={error}
+            details="Please try again later or check your internet connection."
+          />
         </div>
-        {error && (
-          <div className="mb-8 rounded-lg border border-[var(--border)] bg-[var(--background)] p-4">
-            <p className="text-sm text-[var(--destructive)]">
-              <strong>Error:</strong> {error}
-            </p>
-            <p className="text-xs text-[var(--destructive)] mt-1">
-              Please try again later or check your internet connection.
-            </p>
+      )}
+      {coins.length > 0 ? (
+        <CoinList coins={coins} />
+      ) : (
+        !error && (
+          <div className="text-center">
+            <p className="text-[var(--muted-foreground)]">Loading...</p>
           </div>
-        )}
-        {coins.length > 0 ? (
-          <CoinList coins={coins} />
-        ) : (
-          !error && (
-            <div className="text-center">
-              <p className="text-[var(--muted-foreground)]">Loading...</p>
-            </div>
-          )
-        )}
-      </div>
-    </main>
+        )
+      )}
+    </PageContainer>
   );
 }

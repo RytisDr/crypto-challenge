@@ -1,6 +1,8 @@
 import type { Metadata } from "next";
 import { WatchlistContent } from "@/components/WatchlistContent";
 import { fetchTopCoins } from "@/lib/coingecko";
+import { PageContainer } from "@/components/PageContainer";
+import { PageHeader } from "@/components/PageHeader";
 import { Coin } from "@/types/coin";
 
 export const metadata: Metadata = {
@@ -19,18 +21,12 @@ export default async function WatchlistPage() {
   }
 
   return (
-    <main className="min-h-[calc(100vh-64px)] bg-gradient-to-br from-[var(--background)] to-[var(--background)] py-12 px-4 sm:px-6 lg:px-8">
-      <div className="max-w-6xl mx-auto">
-        <div className="mb-12">
-          <h1 className="text-4xl font-bold text-[var(--foreground)] mb-2">
-            Watchlist
-          </h1>
-          <p className="text-[var(--muted-foreground)]">
-            Your favorite cryptocurrencies.
-          </p>
-        </div>
-        <WatchlistContent coins={coins} error={error} />
-      </div>
-    </main>
+    <PageContainer>
+      <PageHeader
+        title="Watchlist"
+        description="Your favorite cryptocurrencies."
+      />
+      <WatchlistContent coins={coins} error={error} />
+    </PageContainer>
   );
 }
