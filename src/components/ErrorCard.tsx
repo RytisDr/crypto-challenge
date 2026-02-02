@@ -14,6 +14,7 @@ export function ErrorCard({
       <p className="text-sm text-[var(--destructive)]">
         <strong>{title}:</strong> {message}
       </p>
+
       {details && (
         <p className="text-xs text-[var(--destructive)] mt-1">{details}</p>
       )}

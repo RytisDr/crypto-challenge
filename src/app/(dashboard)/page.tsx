@@ -36,6 +36,7 @@ export default async function Home() {
           />
         </div>
       )}
+
       {coins.length > 0 ? (
         <CoinList coins={coins} />
       ) : (

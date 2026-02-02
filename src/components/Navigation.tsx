@@ -22,6 +22,7 @@ export function Navigation() {
               CryptoQuick
             </span>
           </Link>
+
           <div className="flex items-center gap-1">
             {navigation.map(({ href, label, icon: Icon }) => {
               const isActive = pathname === href;

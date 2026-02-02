@@ -1,7 +1,6 @@
-import Link from "next/link";
-import { routes } from "@/lib/routes";
+import { PageHeader } from "@/components/PageHeader";
 
-type DetailPageHeaderProps = {
+export type DetailPageHeaderProps = {
   title: string;
   subtitle?: string;
   backLabel?: string;
@@ -11,32 +10,16 @@ type DetailPageHeaderProps = {
 export function DetailPageHeader({
   title,
   subtitle,
-  backLabel = "← Back",
-  maxWidth = "4xl",
+  backLabel,
+  maxWidth,
 }: DetailPageHeaderProps) {
-  const maxWidthClass = {
-    sm: "max-w-sm",
-    md: "max-w-md",
-    lg: "max-w-lg",
-    "4xl": "max-w-4xl",
-  }[maxWidth];
-
   return (
-    <div className={maxWidthClass}>
-      <Link
-        href={routes.home()}
-        className="text-[var(--primary)] hover:text-[var(--primary-foreground)] mb-8 inline-block font-medium transition-colors"
-      >
-        {backLabel}
-      </Link>
-      <div className="mb-8">
-        <h1 className="text-3xl font-bold text-[var(--foreground)] mb-2">
-          {title}
-        </h1>
-        {subtitle && (
-          <p className="text-[var(--muted-foreground)]">{subtitle}</p>
-        )}
-      </div>
-    </div>
+    <PageHeader
+      title={title}
+      subtitle={subtitle}
+      showBack={true}
+      backLabel={backLabel}
+      maxWidth={maxWidth}
+    />
   );
 }

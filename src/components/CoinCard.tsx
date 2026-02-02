@@ -70,6 +70,7 @@ export function CoinCard({ coin }: { coin: Coin }) {
           </div>
         </div>
       </div>
+
       <div className="mt-3 ">
         <StarButton coinId={coin.id} />
       </div>

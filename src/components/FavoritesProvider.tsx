@@ -50,15 +50,15 @@ export function FavoritesProvider({ children }: { children: ReactNode }) {
     return () => window.removeEventListener("storage", onStorage);
   }, []);
 
-  const toggle = useCallback((id: string) => {
-    setFavorites((prev) => {
-      const next = prev.includes(id)
-        ? prev.filter((x) => x !== id)
-        : [...prev, id];
+  const toggle = useCallback((cryptoId: string) => {
+    setFavorites((previousFavorites) => {
+      const updatedFavorites = previousFavorites.includes(cryptoId)
+        ? previousFavorites.filter((id) => id !== cryptoId)
+        : [...previousFavorites, cryptoId];
       try {
-        localStorage.setItem(KEY, JSON.stringify(next));
+        localStorage.setItem(KEY, JSON.stringify(updatedFavorites));
       } catch {}
-      return next;
+      return updatedFavorites;
     });
   }, []);
 
@@ -77,10 +77,10 @@ export function FavoritesProvider({ children }: { children: ReactNode }) {
 }
 
 export function useFavoritesContext() {
-  const ctx = useContext(FavoritesContext);
-  if (!ctx)
+  const context = useContext(FavoritesContext);
+  if (!context)
     throw new Error(
       "useFavoritesContext must be used within FavoritesProvider",
     );
-  return ctx;
+  return context;
 }

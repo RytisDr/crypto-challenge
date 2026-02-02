@@ -1,10 +1,10 @@
 import { fetchCoinDetail } from "@/lib/coingecko";
-import Image from "next/image";
-import { StarButton } from "@/components/StarButton";
 import { notFound } from "next/navigation";
-import { DetailPageHeader } from "@/components/DetailPageHeader";
+import { PageHeader } from "@/components/PageHeader";
 import { ErrorCard } from "@/components/ErrorCard";
-import { Card } from "@/components/Card";
+import { CoinHeader } from "@/components/CoinHeader";
+import { CoinStats } from "@/components/CoinStats";
+import { CoinAbout } from "@/components/CoinAbout";
 
 const pageDescription =
   "View detailed information about a specific cryptocurrency";
@@ -68,7 +68,7 @@ export default async function CoinPage({ params }: { params: any }) {
     return (
       <main className="bg-gradient-to-br from-[var(--background)] to-[var(--background)] py-12 px-4 sm:px-6 lg:px-8">
         <div className="max-w-4xl mx-auto">
-          <DetailPageHeader title="Coin Not Found" />
+          <PageHeader title="Coin Not Found" showBack />
           <div className="mb-8">
             <ErrorCard message={error || "Coin not found"} />
           </div>
@@ -84,69 +84,18 @@ export default async function CoinPage({ params }: { params: any }) {
   return (
     <main className="bg-gradient-to-br from-[var(--background)] to-[var(--background)] py-12 px-4 sm:px-6 lg:px-8">
       <div className="max-w-4xl mx-auto">
-        <DetailPageHeader
+        <PageHeader
           title={coin.name}
           subtitle={coin.symbol.toUpperCase()}
+          showBack
+          maxWidth="4xl"
         />
 
-        <Card className="mb-8">
-          <div className="flex items-start gap-6 mb-6">
-            <Image
-              src={coin.image.large}
-              alt={coin.name}
-              width={100}
-              height={100}
-              className="rounded-lg"
-            />
-            <div className="flex-1">
-              <div className="flex items-center gap-3 mb-4">
-                <h2 className="text-2xl font-bold text-[var(--foreground)]">
-                  {coin.name}
-                </h2>
-                <span className="text-sm font-semibold text-[var(--muted-foreground)] uppercase px-2 py-1 bg-[var(--background)] rounded">
-                  {coin.symbol}
-                </span>
-                <StarButton coinId={coin.id} />
-              </div>
-              {price && (
-                <p className="text-3xl font-bold text-[var(--foreground)]">
-                  $
-                  {price.toLocaleString("en-US", {
-                    minimumFractionDigits: 2,
-                    maximumFractionDigits: 2,
-                  })}
-                </p>
-              )}
-            </div>
-          </div>
+        <CoinHeader coin={coin} price={price} />
 
-          {marketCap && (
-            <div className="grid grid-cols-1 sm:grid-cols-2 gap-4 pt-6 border-t border-[var(--border)]">
-              <div>
-                <p className="text-sm text-[var(--muted-foreground)] mb-2">
-                  Market Cap
-                </p>
-                <p className="text-xl font-semibold text-[var(--foreground)]">
-                  $
-                  {marketCap >= 1e9
-                    ? (marketCap / 1e9).toFixed(2) + "B"
-                    : (marketCap / 1e6).toFixed(2) + "M"}
-                </p>
-              </div>
-            </div>
-          )}
-        </Card>
+        <CoinStats marketCap={marketCap} />
 
-        <Card>
-          <div>
-            <h3 className="text-lg font-bold text-[var(--foreground)] mb-4">
-              About {coin.name}
-            </h3>
-            <p className="text-[var(--muted-foreground)] leading-relaxed">
-              {description}
-            </p>
-          </div>
-        </Card>
+        <CoinAbout name={coin.name} description={description} />
       </div>
     </main>
   );
